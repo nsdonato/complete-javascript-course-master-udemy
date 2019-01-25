@@ -1,0 +1,108 @@
+Modern JavaScript: Using ES6, NPM, Babel and Webpack
+128. Section Intro
+129. Project Overview
+     Download starter project from Github
+
+     Carpeta src (Source)        = codigo fuente (archivos js = vistas, modelos + index.html)
+     Carpeta dist (Distribution) = archivos listos para publicar.
+        css
+        img
+        js = archivos javascript compilados.
+
+
+130. An Overview of Modern JavaScript
+
+    paquetes de terceros
+    node js + NPM              (node js + interfaz de linea de comandos que nos administrar paquetes)
+    librerias / frameworks     (angular, react, etc)
+    herramientas de desarrollo (automatización, transpilación (babel), etc)
+        Separar nuestros archivos en modulos con webpack, uniendolos usando un bundle, ya que los navegadores no soportan esa funcionalidad.
+        Sass, imaganes, disminuir el tamaño de los js usando "sacudidad de arbol"
+    
+    Utilizando los scripts de npm, podemos gestionar todo esto de manera automatica mendiante scripts.
+
+131. A Brief Introduction to the Command Line
+
+    Mediante la linea de comandos:
+        Crear archivos, moverse entre carpetas, etc.
+
+132. A Modern Setup: Installing Node.js and NPM
+
+    1) Pagina de node js, descargar la versión LTS. 
+    2) npm init, para generar el archivo package.json
+    3) npm install webpack --save -dev (para que quede en devDependencies), ya que no debe ir a prod.
+        Como es una herramienta de desarrollo no es necesario que vaya a prod, por lo tanto ponerse en dist, como si debería estar ahi jquery o react x ej.
+    4) npm install jquery --save (para que lo guarde en dependencies)
+    5) npm uninstal jquery --save (no lo vamos a usar, era solo para ver este comando e install)
+    6) npm install live-server --global (para poder usarlo desde cualquier lado, genera un servidor local)
+    
+
+133. A Modern Setup: Configuring Webpack
+
+    7) generar el archivo de config en la raiz del proyecto:
+        webpack.config.js
+
+        4 puntos importantes:
+
+            1) punto de entrada:
+                Donde webpack va a buscar todas las dependencias que después se van a unificar.
+                ./ = es la carpeta actual
+                
+                entry: ['babel-polyfill', './src/js/index.js'],
+            2) output:
+                // Necesitamos el paquete de node path, para que resuelva el path posta hacia el archivo bundle.
+                const path = require('path);
+
+                output: {
+                    path: path.resolve(__dirname, 'dist'),
+                    filename: 'js/bundle.js'
+                },
+                
+            3) loaders:
+
+            
+            4) plugins:
+
+    8) en package.json:
+        "dev": "webpack --mode development",
+
+    9) npm install webpac-cli --save-dev (linea de comando de webpack)
+    10) npm run dev  (se debería generar bundle.js en la carpeta js de dist)
+    11) crear un archivo index.html en dists y agregar el script bundle.js
+    12) open dist/index.html (se debería ver los comentarios que hizo como prueba en el modulo test bla)
+    13) crear el script: "build": "webpack --mode production", para prod
+    14) npm run build (esto hace que se compile la app, se minifiquen archivos etc)
+    
+
+    # Importar un archivo js en otro:
+        import test from './test'
+
+134. A Modern Setup: The Webpack Dev Server
+135. A Modern Setup: Babel
+136. Planning our Project Architecture with MVC
+137. How ES6 Modules Work
+138. Making our First API Calls
+139. Building the Search Model
+140. Building the Search Controller
+141. Building the Search View - Part 1
+142. Building the Search View - Part 2
+143. Rendering an AJAX Loading Spinner
+144. Implementing Search Results Pagination
+145. Building the Recipe Model - Part 1
+146. Building the Recipe Controller
+147. Building the Recipe Model - Part 2
+148. Building the Recipe View - Part 1
+149. Building the Recipe View - Part 2
+150. Updating Recipe Servings
+151. Building the Shopping List Model
+152. Building the Shopping List View
+153. Building the Shopping List Controller
+154. Building the Likes Model
+155. Building the Likes Controller
+156. Building the Likes View
+157. Implementing Persistent Data with localStorage
+158. Wrapping up: Final Considerations
+
+
+
+
