@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <link href="https://fonts.googleapis.com/css?family=Lato:100,300,600" rel="stylesheet" type="text/css">
+        <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
+        <link type="text/css" rel="stylesheet" href="css/style.css">
+        <link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
+        <title>Pig Game</title>
+    </head>
+    <body oncontextmenu="return false">
+        <div class="wrapper clearfix">
+            <div class="jugador-0-panel active">
+                <div class="jugador-nombre" id="nombre-0">Jugador 1</div>
+                <div class="jugador-puntuacion" id="puntuacion-0">43</div>
+                <div class="jugador-actual-box">
+                    <div class="jugador-actual-label">Puntos actuales</div>
+                    <div class="jugador-actual-puntuacion" id="actual-0">11</div>
+                </div>
+            </div>
+
+            <div class="jugador-1-panel">
+                <div class="jugador-nombre" id="nombre-1">Jugador 2</div>
+                <div class="jugador-puntuacion" id="puntuacion-1">72</div>
+                <div class="jugador-actual-box">
+                    <div class="jugador-actual-label">Puntos actuales</div>
+                    <div class="jugador-actual-puntuacion" id="actual-1">0</div>
+                </div>
+            </div>
+            
+            <button id="btn-nuevo"><i class="ion-ios-plus-outline"></i>Nuevo juego</button>
+            <button id="btn-reglas"><i class="ion-ios-information-outline"></i>Reglas</button>
+            <button id="btn-tirar"><i class="ion-ios-loop"></i>Tirar dado</button>
+            <button id="btn-mantener" class="deshabilitado"><i class="ion-ios-download-outline"></i>Mantener</button>
+            
+            <input type="text" placeholder="Puntuación" class="final-puntuacion">
+            
+            <img src="img/dado-5.png" alt="Dice" class="dado" id="dado-1">
+            <img src="img/dado-5.png" alt="Dice" class="dado" id="dado-2">
+        </div>
+        
+        <div id="card-reglas">
+           <div class="">
+            <span id="btn-cerrar-reglas"><i class="ion-ios-close-outline"></i></span>
+           </div>
+            <h3>REGLAS</h3>
+            <div class="line"></div>
+            <p> El juego tiene 2 jugadores que juegan en rondas. <br><br>
+            Al tirar los dados el jugador ira sumando puntos, los cuales podrán acumularse globalmente, si este los mantiene.<br><br>
+            Para esto se debe tener en cuenta que:<br><br>
+             - Si sale doble seis, perderá TODOS los puntos globales acumulados.<br>
+             - Si alguno de los dados, es un 1, solo pierde lo que estaba intentando sumar.<br><br>
+            <em>En ambos casos perdera su turno y pasará al siguiente jugador.</em>
+            <br><br>
+            Los jugadores de común acuerdo pueden poner un tope de puntuación para jugar, sino el primer jugador en llegar o pasar los 100 puntos ganará el juego.
+            </p>
+
+        </div>
+        <script src="js/app.js"></script>
+    </body>
+</html>
