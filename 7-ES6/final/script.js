@@ -568,8 +568,7 @@
     const ans = parseInt(prompt('Write the correct answer'));
     console.log(question.get(ans === question.get('correct')));
 
-
-# clases
+115. Classes
 
     no agregan nada nuevo, sino es mas visual. es mas facil de implementar herencia prototipada.
     También se pueden generar metodos estaticos, que se adjuntan a la clase pero que no heredanlas instancias de la clase.
@@ -615,7 +614,7 @@
 
     Person6.greeting();
 
-# Clases con subclases
+116. Clases con subclases
     Herencia con extends.
     Llamadas al constructor de la clase.
     
@@ -692,8 +691,8 @@
 
 */
 /////////////////////////////////
-// CODING CHALLENGE
-
+//117. CODING CHALLENGE 8
+//118. CODING CHALLENGE 8: Solution
 /*
 
 Suppose that you're working in a small town administration, and you're in charge of two town elements:
