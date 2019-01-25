@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>Click the button to sort the array in ascending order.</p>
+
+<button onclick="myFunction()">Try it</button>
+
+<p id="demo"></p>
+
+<script>
+var points = [40, 100, 1, 5, 25, 10];
+//var pointsAux = [40, 100, 1, 5, 25, 10];
+var min = [];
+var max = [];
+
+document.getElementById("demo").innerHTML = points;
+
+function myFunction() {
+
+  // Recorro un array de 0 a su length
+  // Recorro un array de su length a 0
+  var num1 = 0;
+ //for(var i= 0; i < points.length; i++){
+   
+    debugger;
+    // console.log("valores points: " + points[i]);
+
+    // // Si el numero es mayor al anterior, lo tengo que meter en el fondo, sino, mandarlo
+    // if(points[i] > points[i+1]){
+    //     num1 = points[i];
+    //     max.push(num1);
+    // } else{
+        
+    // var a = [5,3,2,7,10,1];
+    // var b = [5,3,2,7,10,1];
+
+    var a = [5,3,2,7,10,1];
+    var b = [5,3,2,7,10,1];
+
+
+    for (var x = 0; x < a.length; x++) {
+        for (var i = 0; i < a.length-x-1; i++) {
+            if(a[i] < a[i+1]){
+                var tmp = a[i+1];
+                a[i+1] = a[i];
+                a[i] = tmp;
+            }else if(b[i] > b[i+1]){
+                var tmp2 = b[i+1];
+                b[i+1] = b[i];
+                b[i] = tmp2;
+            }
+        }
+    }
+    console.log("mayor: " + a);
+    console.log("menor: " + b);
+  //}
+
+  document.getElementById("demo").innerHTML = a + "<br>" + b;
+}
+</script>
