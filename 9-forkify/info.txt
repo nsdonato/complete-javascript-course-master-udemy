@@ -66,40 +66,334 @@ Modern JavaScript: Using ES6, NPM, Babel and Webpack
     8) en package.json:
         "dev": "webpack --mode development",
 
-    9) npm install webpac-cli --save-dev (linea de comando de webpack)
+    9) npm install webpack-cli --save-dev (linea de comando de webpack)
     10) npm run dev  (se debería generar bundle.js en la carpeta js de dist)
     11) crear un archivo index.html en dists y agregar el script bundle.js
     12) open dist/index.html (se debería ver los comentarios que hizo como prueba en el modulo test bla)
     13) crear el script: "build": "webpack --mode production", para prod
     14) npm run build (esto hace que se compile la app, se minifiquen archivos etc)
     
-
     # Importar un archivo js en otro:
         import test from './test'
 
 134. A Modern Setup: The Webpack Dev Server
+
+
+    15) npm install webpack-dev --save-dev (instala un servidor de desarrollo)
+    16) donde webpack va a "servir" los archivos.
+        El codigo que se le va a enviar al cliente.
+
+        devServer: {
+            contentBase: './dist'
+        },
+    
+    17) "start": "webpack-dev-server --mode development --open" (open sirve para abrir la pag en el navegador, automaticamente (index.html))
+    18) npm install html-webpack-plugin --save-dev
+    19) nos permiten hacer un procesamiento de nuestros archivos de entrada.
+        con esto vamos a mandar el html a la carpeta dist, y vamos a hacer que se inyecte el bundle.js, así que lo sacamos del archivo.
+
+        //hay que agregar:
+        const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+        plugins: [
+            new HtmlWebpackPlugin({
+                filename: 'index.html',
+                template: './src/index.html'
+            })
+        ],
+
+        * en desarrollo no vamos a ver que el archivo html se copie en la carpeta dist, es normal.
+
+    
 135. A Modern Setup: Babel
+     
+     20) Incluimos Babel para poder usar ES6 y que se transpile;
+     21) npm install babel-core babel-preset-env babel-loader --save-dev
+         
+         babel-core: contiene la funcionalidad ppal del compilador
+         babel-preset-env: convierte todas las funcionalidades modernas de JavaScript en ES5. "transpila"
+         babel-loader: necesario para que webpack cargue los archivos de babel.
+         
+        Loader en webpack: 
+            Nos permite cargar todo tipo de archivos diferentes en webpack y procesarlos, como convertir Sass en css, o es6 en es5.
+
+    22) configurar el loader:
+        module: {
+            rules: [
+                {
+                    test: /\.js$/, // -> va a buscar en todos los archivos javascript
+                    exclude: /node_modules/, // -> omitimos la carpeta de node.
+                    use: {
+                        loader: 'babel-loader' // -> le decimos que use babel
+                    }
+                }
+            ]
+        }
+
+    23) generar el archivo de configuración para Babel
+
+        .babelrc
+        
+        {
+            "presets": [
+                ["env", {
+                    "targets": {
+                        "browsers": [
+                            "last 5 versions",
+                            "ie >= 8"
+                        ]
+                    }
+                }]
+            ]
+        }
+
+        Basicamente configuramos que caracteristicas de ES6 va a necesitar convertir para poder trabajar en las ultimas 5 versiones de los buscadores.
+
+        Como hay cosas que no se pueden convertir de ES6 a ES5 porque nisiquiera estaban en ES5 (o sea que se podian hacer pero de otra manera, instalamos pollyfing)    
+
+    24) npm install babel-polyfill --save
+        Es un dependencia real, no de desarrollo, porque:
+        sirve para poder inyectar promesas, ya que no existian en ES5. 
+
 136. Planning our Project Architecture with MVC
+
+     Pensar en la arquitectura, antes de empezar es fundamental.
+
+     Implementar MVC con modulos ES6 reales, ya que en javascript utilizas un solo archivo con todos los modulos, acá generas varios archivos y los importas o exportas segun te convenga.
+    
+    25) 
+        M: 
+            - Search.js
+            - Recipe.js
+            - List.js
+            - Likes.js
+
+        V: 
+            - searchView.js 
+            - RecipeView.js 
+            - listView.js 
+            - likesView.js 
+
+        C: 
+            - index.js
+
+     model y view, no se tienen que comunicar entre si, esto se hace a través de controller.
+
 137. How ES6 Modules Work
+
+    26) Por convención el nombre de los modulos arrancan con mayuscula.
+
+        En index.js:
+            import stringEjemplo from './models/Search';
+            import { add, multiply } from './views/searchView';
+
+            console.log(`Usando multiplicación: ${add(1,3)}`);
+            console.log(`${stringEjemplo}`);
+
+        En Search:
+            export const stringEjemplo = 'Hola';
+
+        En searchView:
+            export const add = (a,b) => a + b;
+            export const multiply = (a,b) => a * b;
+        
+        * se puede usar alias en los imports, ej:
+            add as a
+        
+        * se puede importar todo así:
+            import * as searchView from './views/searchView';
+            console.log(`Total: ${searchView.add(1,2)}`;
+
 138. Making our First API Calls
+
+    27) Generar el token en la pagina de food2fork, para poder usar la api.
+    28) npm install axios --save // Para hacer la llamada a la api vamos a usar axios.
+        
+        para importar paquetes propios de npm, no hace falta la ruta sino el nobre del paquete:
+            
+            import axios from 'axios';
+
+            * por convencion se pone en la constante el mismo nombre del paquete.
+
+            import { add, multiply } from './views/searchView';
+
+        Ejemplos de como llamar a la api con axios.
+    
+    * No usar fetch, porque no funciona bien en los servidores viejos.
+
+        import axios from 'axios';
+        import { key, proxy } from '../config';
+
+        export default class Search {
+            constructor(query) {
+                this.query = query;
+            }
+
+            async getResults() {
+                try {
+                    const res = await axios(`${proxy}http://food2fork.com/api/search?key=${key}&q=${this.query}`);
+                    this.result = res.data.recipes;
+                    // console.log(this.result);
+                } catch (error) {
+                    alert(error);
+                }
+            }
+        }
+
 139. Building the Search Model
+
+    - exportamos la clase Search en index.
+    
 140. Building the Search Controller
+
+     Esto es un patron, se llama "observador", nos permite conocer el estado actual de un objeto ante un cambio.
+
+     - Generar la variable de estado, donde va estar el estado de la app, la información actual de la busqueda, los likes, la lista de compra.
+     - Eventlistener para el submite del buscar.
+
 141. Building the Search View - Part 1
+
+    - Generó un export para los elementos que tienen acción en un js y los importó en otro.
+    - Genero la llamada a la api y limpio los elementos del front.
+
 142. Building the Search View - Part 2
+
+    - Recortar el titulo de las recetas
+    - Usó el metodo split de los array, para separar las palabras del string y ponerlas en un array
+    - Usó el metodo reduce, que tiene un acumulador propio, es como haber hecho un foreach y creado una cariable externa para acumular la info de las iteraciones.
+    - Usó el metodo join de los array, para unir los diferentes valores de los indices, uniendolos con un espacio en el medio.
+    
 143. Rendering an AJAX Loading Spinner
+
+    - Puso el loader cuando buscaba que queria comer.
+
 144. Implementing Search Results Pagination
+
+    - Como usar el metodo .closest para facilitar event handling.
+    - Como y porque usar los atributos data-* en HTML5.
+
+    - Math.ceil() redondea hacía arriba ej: 4.1 es 5
+
+    - Cuando no sabes donde poner el clic, porque quizas le hacen clic al icono o a la palabra, se puede usar e.target.closest('clasepadre') para que se ejecute como si hubiera hecho clic en el boton.
+        Al guardar quien es el padre en una constante (el que tiene el data-goto-numPage) se puede usar:
+        btn = elemento padre
+        dataset = tiene la info de los data-
+        goto = en este caso es goto pero puede ser page o cualquir cosa.
+
+        btn.dataset.goto;
+
+
 145. Building the Recipe Model - Part 1
+
+    - Crea la clase Recipe en el nuevo model Recipe.js
+    - Crea el metodo getRecipe con try catch
+    - Para no repetir la info de la api, porque hay que hacer otro llamado ahí se crea un archivo de configuración en la raiz.
+      config.js
+
 146. Building the Recipe Controller
+
+    
+    - Como leer datos de la URL de la pagina.
+    - Como responder al evento: hashchange
+    - Como agregar el mismo event listener a multiple eventos.
+    - Creamos el controlador Recipe en index js que es el único controlador en si en archivo, que vamos a tener.
+
+
+    // Cuando cambia nuestra url al hacer clic en otra receta.
+    window.addEventListener('hashchange',controlRecipe);
+
+    // Obtener el hash: (devuelve el # de la url)
+    window.location.hash;
+
+    // Le sacamos el # y lo reemplazamos por nada.
+    window.location.hash.replace('#','');
+
+    // Agregamos un eventlistener para dos dos llamados que se hacian al controllerRecipe:
+       Guardamos los eventos en un array, llamamos a cada uno de sus event listener, pasando el evento que le corresponde
+
 147. Building the Recipe Model - Part 2
+
+    - Usar los metodos: map, slice, findIndex y includes
+    - Como y porque usar eval()
+
+    - Genera un parseador de ingredientes, para que este normalizado lo que se muestre.
+      ej cucharadas, cucharaditas.. etc.
+
+    - Vamos a usar el metodo map, para iterar sobre cada elemento y guardarlo en un nuevo array.
+    - Explica sobre expresiones regulares:
+        https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Regular_Expressions
+        - Comienzan y terminan con /
+
+        // Va a reemplazar los parentesis con nada.
+        ingredient = ingredient.replace(/ *\([^)]*\) */g, ' ');
+
+    - .findIndex
+      ES6 metodo, devuelve un callback function, devuelve el indice si la condición es true, en el ejemplo que el dió.
+
+    - .includes
+      Es un metodo nuevo de los Array, ES7 u ES8, devuelve true si el elemento que esta pasando en el foreach, está en la matriz.
+       
+    - eval("4+1/2) --> 5 // evalua y genera un resultado.
+
 148. Building the Recipe View - Part 1
+
+    - Mostrar los ingredientes de la receta, en la parte del medio
+
 149. Building the Recipe View - Part 2
+
+    - npm install fractional --save
+      es un paquete de npm que devuelve hace facil add, substract, multiply and divide.
+      El lo usa para devolver los numeros como fracciones, ej: 2.5 --> 2 1/2
+
+    - Remarcar la receta que acabamos de clickear.
+
 150. Updating Recipe Servings
+
+    - Actualizar los comenzales, la cantidad de personas que terminan comiendo con la receta. PORCIONES FORK
+    - Otra manera de implementar event delegation con .matches
+        
+        El * significa o cualquier hijo. o sea, en la img o en el a=href
+        e.target.matches('.btn-decrease', .btn-increase *')
+
 151. Building the Shopping List Model
+
+    - Como crear IDs unicos usando un paquete externo    
+    - Diferencia entre Array.slice y .splice
+    - Mas casos de uso para Array.findIndex y Array.find
+
+      npm install uniqid --save
+        Genera id unicos para los elementos del carrito.
+
+    Splice elimina el elemento del array, con su index y la cantidad de elementos a borrar
+        // [2,4,8] splice(1, 2) -> returns [4, 8], original array is [2]
+        // [2,4,8] slice(1, 2) -> returns 4, original array is [2,4,8]
+        this.items.splice(index, 1);
+
 152. Building the Shopping List View
+
+    - Genero la clase lista, los metodos para agregar y eliminar 
+    elementos, los elementos de la vista que agarra con querySelector, etc
+
 153. Building the Shopping List Controller
+
+    - El controlador para la lista de compras.
+    - Mostrar los elementos de la lista de compras
+
 154. Building the Likes Model
+
+    - Genera el modelo Likes.
+    - Genera la clase Likes
+        le agrega los metodos parecidos a la lista, agregar, eliminar, etc.
+
 155. Building the Likes Controller
+
+    - Crea el controlador de likes, addeventlistener y toda la bola para agregar, eliminar de favs.
+
 156. Building the Likes View
+
+    - Agrega la vista de likes, la parte de poner y sacar el fav,
+     y el codigo html que se pone cuando lo ponen como fav.
+
 157. Implementing Persistent Data with localStorage
 158. Wrapping up: Final Considerations
 
