@@ -441,6 +441,8 @@ Modern JavaScript: Using ES6, NPM, Babel and Webpack
 
 ### BONUS: A Node.js Crash Course ###
 
+Estos hay que revisarlos bien.
+
 162. A Quick Overview of Node.js
 
     Usar JavaScript en el back.
