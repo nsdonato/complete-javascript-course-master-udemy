@@ -395,7 +395,68 @@ Modern JavaScript: Using ES6, NPM, Babel and Webpack
      y el codigo html que se pone cuando lo ponen como fav.
 
 157. Implementing Persistent Data with localStorage
+
+    - Como usar la API localStorage
+    - Como setear, obtener y eliminar items del localStorage
+
+    LocalStorage:
+        * key-value
+        * mantener la información aún cuando se refresca la página.
+
+        Guardar
+            localStorage.setItem('key',id');
+
+        Obtener
+            localStorage.getItem('key');
+
+        Eliminar
+            localStorage.removeItem('key');
+        
+        Ver que hay en el localStorage:
+            > localStorage
+            > localStorage.lenght
+
+        Guardar los likes en el local storage.    
+            localStorega.setItem('likes',JSON.stringify(this.likes));
+
+        Obtener los likes del localStorage
+            const storage = JSON.parse(localStorega.getItem('likes'));
+
+        
 158. Wrapping up: Final Considerations
+
+    - Elimina espacios, saca las cosas que había puesto de pruebas.
+    - Muestra todas las cosas que se pueden hacer mejor del proyecto y lo deja para que lo hagamos nosotros.
+
+159. Some considerations Before You start
+    - Cuestionario
+
+-# CONCLUSION #-
+
+160. Where to go from here
+    - Aprender, practicar, etc.
+
+161. Be the First to Know About New Course Launches!
+    Zaraza sobre puntuar el curso y subscribirse al newsletter.
+
+### BONUS: A Node.js Crash Course ###
+
+162. A Quick Overview of Node.js
+
+    Usar JavaScript en el back.
+
+    Node Js es ambiente  de tiempo de ejecución, creado bajo el motor de JavaScript V8
+    Es un ambiente donde se puede correr JavaScript    
+    Usamos Node como un web server.
+     
+163. The Laptop Store Project, Part 1
+
+    - Descargar Node Js.
+    - npm install nodemon -g  // instala nodemon  globalmente para en vez de escribir todo el tiempo node index.js, escribe nodemon
+    - require, fs, http, url
+
+
+    
 
 
 
